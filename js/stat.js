@@ -25,7 +25,6 @@ var getMaxElement = function (arr) {
       maxElement = arr[i];
     }
   }
-
   return maxElement;
 };
 
@@ -45,19 +44,12 @@ window.renderStatistics = function (ctx, names, times) {
     ctx.fillStyle = '#000';
     ctx.fillText(Math.round(times[i]), FONT_X + (BAR_GAP + BAR_WIDTH) * i, timeHeight + BAR_Y);
     ctx.fillText(names[i], FONT_X + (BAR_GAP + BAR_WIDTH) * i, FONT_Y + GAP);
-    // TODO Можно ли как-то сократить код?
-    if (i === 1) {
-      ctx.fillStyle = 'rgba(0, 0, 255, 0.9)';
-    } else if (i === 2) {
-      ctx.fillStyle = 'rgba(0, 0, 255, 0.8)';
-    } else if (i === 3) {
-      ctx.fillStyle = 'rgba(0, 0, 255, 0.7)';
-    }
 
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+    } else {
+      ctx.fillStyle = 'rgba(0, 0, 255,' + Math.random() + ')';
     }
-    // TODO Здесь есть вопросы, не пойму почему без знака "-" не обойтись
     ctx.fillRect(BAR_X + (BAR_GAP + BAR_WIDTH) * i, BAR_Y + BAR_MAX_HEIGHT, BAR_WIDTH, -currentBarHeight + 2 * GAP);
   }
 };
