@@ -11,10 +11,21 @@ var BAR_Y = 80;
 var FONT_X = BAR_X;
 var FONT_Y = 250;
 var BAR_MAX_HEIGHT = 150;
+var timeHeight = 0;
+var currentBarHeight = 0;
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
+};
+
+var drawText = function (ctx, i, times, names) {
+  ctx.fillText(Math.round(times[i]), FONT_X + (BAR_GAP + BAR_WIDTH) * i, timeHeight + BAR_Y);
+  ctx.fillText(names[i], FONT_X + (BAR_GAP + BAR_WIDTH) * i, FONT_Y + GAP);
+};
+
+var drawDiagram = function (ctx, i) {
+  ctx.fillRect(BAR_X + (BAR_GAP + BAR_WIDTH) * i, BAR_Y + BAR_MAX_HEIGHT, BAR_WIDTH, -currentBarHeight + 2 * GAP);
 };
 
 var getMaxElement = function (arr) {
@@ -38,18 +49,16 @@ window.renderStatistics = function (ctx, names, times) {
 
   var maxTime = getMaxElement(times);
   for (var i = 0; i < names.length; i++) {
-    var currentBarHeight = (BAR_MAX_HEIGHT * times[i]) / maxTime;
-    var timeHeight = BAR_MAX_HEIGHT - currentBarHeight;
+    currentBarHeight = (BAR_MAX_HEIGHT * times[i]) / maxTime;
+    timeHeight = BAR_MAX_HEIGHT - currentBarHeight;
 
     ctx.fillStyle = '#000';
-    ctx.fillText(Math.round(times[i]), FONT_X + (BAR_GAP + BAR_WIDTH) * i, timeHeight + BAR_Y);
-    ctx.fillText(names[i], FONT_X + (BAR_GAP + BAR_WIDTH) * i, FONT_Y + GAP);
-
+    drawText(ctx, i, times, names);
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
     } else {
-      ctx.fillStyle = 'rgba(0, 0, 255,' + Math.random() + ')';
+      ctx.fillStyle = 'rgba(0, 0, 255,' + Math.random().toFixed(2) + ')';
     }
-    ctx.fillRect(BAR_X + (BAR_GAP + BAR_WIDTH) * i, BAR_Y + BAR_MAX_HEIGHT, BAR_WIDTH, -currentBarHeight + 2 * GAP);
+    drawDiagram(ctx, i, currentBarHeight);
   }
 };
