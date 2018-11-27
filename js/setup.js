@@ -11,8 +11,8 @@ var similarListElement = userDialog.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
 // Заводим массивы с нужными данными
-var WIZARD_NAMES = [' Иван', ' Хуан Себастьян', ' Мария', ' Кристоф', ' Виктор', ' Юлия', ' Люпита', ' Вашингтон'];
-var WIZARDS_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
+var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
+var WIZARDS_SURNAMES = [' да Марья', ' Верон', ' Мирабелла', ' Вальц', ' Онопко', ' Топольницкая', ' Нионго', ' Ирвинг'];
 var WIZARD_COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 
@@ -21,15 +21,23 @@ var getRandomInt = function (max, min) {
   return Math.floor(Math.random() * (max - min) + min);
 };
 
-// Массив с количеством волшебников
-var wizards = [{}, {}, {}, {}];
+// Массив с волшебниками
+var wizards = [];
 
-// Создаем свойства для волшебников (имя, цвет мантии, цвет глаз)
-for (var i = 0; i < wizards.length; i++) {
-  wizards[i].name = WIZARDS_SURNAMES[getRandomInt(WIZARDS_SURNAMES.length, 0)] + WIZARD_NAMES[getRandomInt(WIZARD_NAMES.length, 0)];
-  wizards[i].coatColor = WIZARD_COAT_COLORS[getRandomInt(WIZARD_COAT_COLORS.length, 0)];
-  wizards[i].eyesColor = WIZARD_EYES_COLORS[getRandomInt(WIZARD_EYES_COLORS.length, 0)];
-}
+// Константа длины массива
+var WIZARDS_LENGTH = 4;
+
+// Функция для создания массива с объектами (волшебниками)
+var createArray = function (arr) {
+  for (var i = 0; i < WIZARDS_LENGTH - 1; i++) {
+    arr[i] = {name: WIZARD_NAMES[getRandomInt(WIZARD_NAMES.length, 0)] + WIZARDS_SURNAMES[getRandomInt(WIZARDS_SURNAMES.length, 0)],
+      coatColor: WIZARD_COAT_COLORS[getRandomInt(WIZARD_COAT_COLORS.length, 0)],
+      eyesColor: WIZARD_EYES_COLORS[getRandomInt(WIZARD_EYES_COLORS.length, 0)]};
+    arr.push(arr[i]);
+  }
+};
+
+createArray(wizards);
 
 // Функция для создания волшебника
 var renderWizard = function (wizard) {
@@ -43,19 +51,19 @@ var renderWizard = function (wizard) {
   return wizardElement;
 };
 
-// Функция для отрисовки волшебника на странице
-var drawWizards = function (arr) {
+// Функция для создания фргамента, в котором будет наш массив
+var makeFragment = function (arr) {
   // Создаем пустой фрагмент
   var fragment = document.createDocumentFragment();
   // Далее вставляем, в ранее созданный фрагмент, волшебников
-  for (i = 0; i < arr.length; i++) {
+  for (var i = 0; i < arr.length; i++) {
     fragment.appendChild(renderWizard(arr[i]));
   }
   return fragment;
 };
 
-// Вставляем содержимое фрагмента в DOM-дерево
-similarListElement.appendChild(drawWizards(wizards));
+// Вставляем содержимое фрагмента (наш массив) в DOM-дерево
+similarListElement.appendChild(makeFragment(wizards));
 
-// Отображаем список похожих магов на странице
+// Отображаем блок "список похожих магов" на странице
 userDialog.querySelector('.setup-similar').classList.remove('hidden');
