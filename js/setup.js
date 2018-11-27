@@ -1,4 +1,7 @@
 'use strict';
+// Константа длины массива
+var WIZARDS_LENGTH = 4;
+
 // Находим окно настроек на странице
 var userDialog = document.querySelector('.setup');
 
@@ -12,7 +15,7 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template').c
 
 // Заводим массивы с нужными данными
 var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var WIZARDS_SURNAMES = [' да Марья', ' Верон', ' Мирабелла', ' Вальц', ' Онопко', ' Топольницкая', ' Нионго', ' Ирвинг'];
+var WIZARDS_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var WIZARD_COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 
@@ -24,16 +27,14 @@ var getRandomInt = function (max, min) {
 // Массив с волшебниками
 var wizards = [];
 
-// Константа длины массива
-var WIZARDS_LENGTH = 4;
-
 // Функция для создания массива с объектами (волшебниками)
 var createArray = function (arr) {
-  for (var i = 0; i < WIZARDS_LENGTH - 1; i++) {
-    arr[i] = {name: WIZARD_NAMES[getRandomInt(WIZARD_NAMES.length, 0)] + WIZARDS_SURNAMES[getRandomInt(WIZARDS_SURNAMES.length, 0)],
+  for (var i = 0; i < WIZARDS_LENGTH; i++) {
+    arr[i] = {
+      name: WIZARD_NAMES[getRandomInt(WIZARD_NAMES.length, 0)] + ' ' + WIZARDS_SURNAMES[getRandomInt(WIZARDS_SURNAMES.length, 0)],
       coatColor: WIZARD_COAT_COLORS[getRandomInt(WIZARD_COAT_COLORS.length, 0)],
-      eyesColor: WIZARD_EYES_COLORS[getRandomInt(WIZARD_EYES_COLORS.length, 0)]};
-    arr.push(arr[i]);
+      eyesColor: WIZARD_EYES_COLORS[getRandomInt(WIZARD_EYES_COLORS.length, 0)]
+    };
   }
 };
 
