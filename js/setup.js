@@ -1,12 +1,19 @@
 'use strict';
 // Константа длины массива
 var WIZARDS_LENGTH = 4;
+var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 
 // Находим окно настроек на странице
 var userDialog = document.querySelector('.setup');
 
-// Показываем окно настроек на странице
-userDialog.classList.remove('hidden');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = userDialog.querySelector('.setup-close');
+var usernameInput = userDialog.querySelector('.setup-user-name');
+
+var wizardCoat = userDialog.querySelector('.setup-wizard .wizard-coat');
+var wizardEyes = userDialog.querySelector('.setup-wizard .wizard-eyes');
+var wizardFireball = userDialog.querySelector('.setup-fireball-wrap');
 
 // В найденном окне настроек находим поле с похожими волшебниками, позже мы будем добавлять в этот список волшебников
 var similarListElement = userDialog.querySelector('.setup-similar-list');
@@ -14,10 +21,46 @@ var similarListElement = userDialog.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
 // Заводим массивы с нужными данными
-var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var WIZARDS_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var WIZARD_COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+var WIZARD_NAMES = [
+  'Иван',
+  'Хуан Себастьян',
+  'Мария',
+  'Кристоф',
+  'Виктор',
+  'Юлия',
+  'Люпита',
+  'Вашингтон'
+];
+
+var WIZARDS_SURNAMES = [
+  'да Марья',
+  'Верон',
+  'Мирабелла',
+  'Вальц',
+  'Онопко',
+  'Топольницкая',
+  'Нионго',
+  'Ирвинг'
+];
+
+var WIZARD_COAT_COLORS = [
+  'rgb(101, 137, 164)',
+  'rgb(241, 43, 107)',
+  'rgb(146, 100, 161)',
+  'rgb(56, 159, 117)',
+  'rgb(215, 210, 55)',
+  'rgb(0, 0, 0)'
+];
+
 var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+
+var WIZARD_FIREBALL_COLORS = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
 
 // Функция для создания случайного целого числа
 var getRandomInt = function (max, min) {
@@ -68,3 +111,59 @@ similarListElement.appendChild(makeFragment(wizards));
 
 // Отображаем блок "список похожих магов" на странице
 userDialog.querySelector('.setup-similar').classList.remove('hidden');
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+var onPopupEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
+};
+var closePopup = function () {
+  userDialog.classList.add('hidden');
+};
+var openPopup = function () {
+  userDialog.classList.remove('hidden');
+  document.addEventListener('click', onPopupEscPress);
+};
+
+setupOpen.addEventListener('click', openPopup);
+setupOpen.addEventListener('keydown', onPopupEnterPress);
+setupClose.addEventListener('click', closePopup);
+
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ESC_KEYCODE || evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+});
+
+// Проверка валидации инпута
+usernameInput.addEventListener('invalid', function () {
+  if (usernameInput.validity.tooShort) {
+    usernameInput.setCustomValidity('Имя должно содержать более 2-х символов');
+  } else if (usernameInput.validity.tooLong) {
+    usernameInput.setCustomValidity('Имя должно содержать менее 25-ти символов');
+  } else if (usernameInput.validity.valueMissing) {
+    usernameInput.setCustomValidity('Заполните поле');
+  } else {
+    usernameInput.setCustomValidity('');
+  }
+});
+
+// По клику по мантии изменяется её цвет
+wizardCoat.addEventListener('click', function () {
+  wizardCoat.style.fill = WIZARD_COAT_COLORS[getRandomInt(WIZARD_COAT_COLORS.length, 0)];
+});
+
+// По клику на глаза изменяется их цвет
+wizardEyes.addEventListener('click', function () {
+  wizardEyes.style.fill = WIZARD_EYES_COLORS[getRandomInt(WIZARD_EYES_COLORS.length, 0)];
+});
+
+// По клику на фаербол изменяется его цвет
+wizardFireball.addEventListener('click', function () {
+  wizardFireball.style.background = WIZARD_FIREBALL_COLORS[getRandomInt(WIZARD_FIREBALL_COLORS.length, 0)];
+});
